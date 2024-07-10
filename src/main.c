@@ -49,6 +49,7 @@ INT main(INT argc, CHAR* argv[]){
     NTSTATUS status = NtSuspendProcess(process);
     if(!NT_SUCCESS(status)){
         printf("NtSuspendProcess failed with NTSTATUS 0x%lx", status);
+        CloseHandle(process);
         return 4;
     }
     printf("[!] Press W to unsuspend the process with PID %d\n", pid);
@@ -58,8 +59,10 @@ INT main(INT argc, CHAR* argv[]){
             NTSTATUS status = NtResumeProcess(process);
             if(!NT_SUCCESS(status)){
                 printf("NtResumeProcess failed with NTSTATUS 0x%lx", status);
+                CloseHandle(process);
                 return 5;
             }
+            CloseHandle(process);
             break;
         }
     }
